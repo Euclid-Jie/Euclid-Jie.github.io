@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="张量 Tensor 的 梯度 grad何为梯度 grad记录loss对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用tensor.requires_grad查询张量是否带梯度 123456789101112import torchtensor_demo &#x3D; torch.tensor([[1,2,3],[4,5,6]])# 返回False说明不带gradtensor_demo.r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tensor&#39;s Grad">
+<meta property="og:url" content="https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/index.html">
+<meta property="og:site_name" content="Euclid Jie&#39;s Blog">
+<meta property="og:description" content="张量 Tensor 的 梯度 grad何为梯度 grad记录loss对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用tensor.requires_grad查询张量是否带梯度 123456789101112import torchtensor_demo &#x3D; torch.tensor([[1,2,3],[4,5,6]])# 返回False说明不带gradtensor_demo.r">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-21T15:14:34.000Z">
+<meta property="article:modified_time" content="2023-12-21T15:21:40.805Z">
+<meta property="article:author" content="Euclid Jie">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="torch">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Tensor&#39;s Grad</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/10/26/demo-markdown-format-test/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&text=Tensor&#39;s Grad"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&is_video=false&description=Tensor&#39;s Grad"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tensor&#39;s Grad&body=Check out this article: https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&name=Tensor&#39;s Grad&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&t=Tensor&#39;s Grad"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%A0%E9%87%8F-Tensor-%E7%9A%84-%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.</span> <span class="toc-text">张量 Tensor 的 梯度 grad</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E4%B8%BA%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.1.</span> <span class="toc-text">何为梯度 grad</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#grad%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">grad有什么用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%85%E7%A9%BA%E5%8D%95%E4%B8%AA%E5%BC%A0%E9%87%8F%E7%9A%84grad"><span class="toc-number">3.</span> <span class="toc-text">清空单个张量的grad</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86grad-%E8%BD%AC%E4%B8%BA-feature-importance"><span class="toc-number">4.</span> <span class="toc-text">将grad 转为 feature importance</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Tensor&#39;s Grad
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Euclid Jie</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-21T15:14:34.000Z" class="dt-published" itemprop="datePublished">2023-12-21</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/python/" rel="tag">python</a>, <a class="p-category" href="/tags/torch/" rel="tag">torch</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="张量-Tensor-的-梯度-grad"><a href="#张量-Tensor-的-梯度-grad" class="headerlink" title="张量 Tensor 的 梯度 grad"></a>张量 <code>Tensor</code> 的 梯度 <code>grad</code></h1><h2 id="何为梯度-grad"><a href="#何为梯度-grad" class="headerlink" title="何为梯度 grad"></a>何为梯度 <code>grad</code></h2><p>记录<code>loss</code>对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用<code>tensor.requires_grad</code>查询张量是否带梯度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">tensor_demo = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"><span class="comment"># 返回False说明不带grad</span></span><br><span class="line">tensor_demo.requires_grad</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个带有grad的张量</span></span><br><span class="line"><span class="comment"># 注意，int不能带有grad，故使用float32</span></span><br><span class="line">tensor_demo = torch.tensor(</span><br><span class="line">    [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]], dtype=torch.float32, requires_grad=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># 返回True说明这是一个带grad的张量</span></span><br><span class="line">tensor_demo.requires_grad</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="grad有什么用"><a href="#grad有什么用" class="headerlink" title="grad有什么用"></a><code>grad</code>有什么用</h1><p>可以利用<code>torch</code>的自动求导特性，得到<code>loss</code>关于次参数的导数，并利用此导数进行参数更新</p>
+<p>具体而言，模型的一个<code>epoch</code>有这么五步</p>
+<blockquote>
+<p>如果模型的设计是，参数是每个<code>step</code>更新，那每个<code>step</code>都有这么几步</p>
+</blockquote>
+<ol>
+<li><p>向前传播，<code>forward</code>，即使用模型，传入<code>feature</code>，得到模型输出<code>pred</code></p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pred = model(feature)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算<code>loss</code>，这里的<code>loss_func</code>为自己定义的函数，比如常见的<code>L1 loss</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss = loss_func(pred, target)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>向后传播，<code>backward</code>，即对模型各个参数计算对应的<code>grad</code></p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss.backward()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更新模型参数，根据自己定义的优化器<code>optimizer</code>策略，进行参数更新</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer.step() </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将模型所有参数的<code>grad</code>重置为0</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer.zero_grad()</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>​	</p>
+<h1 id="清空单个张量的grad"><a href="#清空单个张量的grad" class="headerlink" title="清空单个张量的grad"></a>清空单个张量的<code>grad</code></h1><p>当张量被初始化时，是没有梯度，是不用清空的，此时<code>grad</code>为<code>None</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">tensor_demo = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]],dtype=torch.float32).requires_grad_(<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 啥也不返回说明grad是None</span></span><br><span class="line">tensor_demo.grad</span><br></pre></td></tr></table></figure>
+
+<p>一旦基于此<code>tensor</code>的计算的值进行了<code>backward</code>，也就是依据计算图计算了各个参数的grad，此<code>tensor</code>附带的<code>grad</code>就不是<code>None</code>了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">tensor_demo = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]],dtype=torch.float32).requires_grad_(<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 基于tesor_demo计算得到res</span></span><br><span class="line">res =(tensor_demo**<span class="number">2</span>).sigmoid().<span class="built_in">sum</span>()</span><br><span class="line"><span class="comment"># 计算grad</span></span><br><span class="line">res.backward()</span><br><span class="line"><span class="comment"># 打印tensor的grad</span></span><br><span class="line">tensor_demo.grad</span><br></pre></td></tr></table></figure>
+
+<p>梯度在每次<code>backward</code>是不会被覆盖的，而是累计，所以需要手动清空，这里的清空是指将梯度设置为0；需要注意的是如果<code>grad</code>是<code>None</code>，是不能被清空的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> tensor_demo.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;grad is not None, will set grad to zeros&quot;</span>)</span><br><span class="line">    tensor_demo.grad.zero_()</span><br><span class="line"><span class="comment"># 如果grad不是None，将被重置为0</span></span><br><span class="line">tensor_demo.grad</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="将grad-转为-feature-importance"><a href="#将grad-转为-feature-importance" class="headerlink" title="将grad 转为 feature importance"></a>将<code>grad</code> 转为 <code>feature importance</code></h1><p>对<code>feature</code>添加<code>grad</code>，进行<code>backward</code>后，基于<code>grad</code>计算<code>feature importance</code></p>
+<ol>
+<li><p>读取模型参数，使用模型预测</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">model = DailyNet.load_from_checkpoint(</span><br><span class="line">    Path(<span class="string">&quot;epoch04.ckpt&quot;</span>),</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 如果模型中有dropout等层，需要进行处理，否则后续操作有随机性</span></span><br><span class="line">model._gru_block._gru.dropout = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以将参数的梯度去掉, 并不影响featuer的grad计算</span></span><br><span class="line"><span class="comment"># for param in model.parameters():</span></span><br><span class="line"><span class="comment">#     param.detach_()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># NOTE 需要给feature添加grad</span></span><br><span class="line">input_feature = input_feature.requires_grad_(<span class="literal">True</span>)</span><br><span class="line">preds = model(input_feature).cpu()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算<code>loss</code>，并<code>backward</code></p>
+<blockquote>
+<p><code>loss_func</code>为自定义的损失函数，<code>target</code>为真实值</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> input_feature.requires_grad:</span><br><span class="line">    <span class="keyword">if</span> input_feature.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        input_feature.grad.zero_()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">raise</span> KeyError(<span class="string">&quot;input_feature requires grad&quot;</span>)</span><br><span class="line"></span><br><span class="line">loss = loss_func(preds, target)</span><br><span class="line"></span><br><span class="line">loss.backward()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>根据<code>grad</code>计算<code>feature importance</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grad = input_feature.grad</span><br><span class="line">grad.<span class="built_in">abs</span>().<span class="built_in">sum</span>(axis=(<span class="number">0</span>, <span class="number">1</span>)) / grad.<span class="built_in">abs</span>().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%A0%E9%87%8F-Tensor-%E7%9A%84-%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.</span> <span class="toc-text">张量 Tensor 的 梯度 grad</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E4%B8%BA%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.1.</span> <span class="toc-text">何为梯度 grad</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#grad%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">grad有什么用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%85%E7%A9%BA%E5%8D%95%E4%B8%AA%E5%BC%A0%E9%87%8F%E7%9A%84grad"><span class="toc-number">3.</span> <span class="toc-text">清空单个张量的grad</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86grad-%E8%BD%AC%E4%B8%BA-feature-importance"><span class="toc-number">4.</span> <span class="toc-text">将grad 转为 feature importance</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&text=Tensor&#39;s Grad"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&is_video=false&description=Tensor&#39;s Grad"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tensor&#39;s Grad&body=Check out this article: https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&title=Tensor&#39;s Grad"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&name=Tensor&#39;s Grad&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/&t=Tensor&#39;s Grad"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    Euclid Jie
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
