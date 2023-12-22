@@ -1,16 +1,18 @@
 ---
 title: hexo blog 实现
 date: 2023-10-15 22:08:30
-tags: [node, hexo]
+tags: 
+  - node
+  - hexo
 ---
 
 > 主要参照于[此文](http://blog.haoji.me/build-blog-website-by-hexo-github.html?from=xa)，但是针对自己的需求做了一些改变
 
-# 准备工作
+## 准备工作
 
-## 安装`node.js`
+### 安装`node.js`
 
-`node.js`是`js`运行的必要条件，关于`node.js`的安装，各种教程很多，直接从[官网](https://nodejs.org/en)下载安装即可
+``node.js`是`js`运行的必要条件，关于`node.js`的安装，各种教程很多，直接从[官网](https://nodejs.org/en)下载安装即可
 
 -  检测是否安装成功
 
@@ -30,11 +32,11 @@ tags: [node, hexo]
   npm -v
   ```
 
-## 确认`node.js`的版本
+### 确认`node.js`的版本
 
 据我了解，如果想要运行`hexo`，需要的`node.js`版本需要再14以上。由于我之前还部署过`gitbook`，本机的`node.js`版本为`v10.24.1`，所以需要更新`node.js`版本，但是如果我要兼容多个版本的`node.js`当然也是可以的，用到下文中的`nvmv`即可实现
 
-## `nvmw`工具
+### `nvmw`工具
 
 > 用于管理多个`node.js`版本，由于我是windows11，故选择此工具
 
@@ -76,11 +78,11 @@ tags: [node, hexo]
   nvmw switch v10.24.1
   ```
 
-# 使用`hexo`构建博客
+## 使用`hexo`构建博客
 
 > `hexo`是一个成熟的博客生成，管理系统，有丰富的插件，主题生态，官网[链接](http://hexo.io)
 
-## 安装`hexo`
+### 安装`hexo`
 
 - 使用`npm`进行全局安装`hexo`
 
@@ -88,7 +90,7 @@ tags: [node, hexo]
   npm install -g hexo
   ```
 
-## 初始化本地repo
+### 初始化本地repo
 
 > 从本步骤开始，会与网络上的主流教程不同，如果你有一定的`git`的使用经验，并希望对你的创作内容进行版本控制，我更推荐使用我的方案
 
@@ -124,7 +126,7 @@ tags: [node, hexo]
   hexo s
   ```
 
-## 使用`hexo`组织博客内容
+### 使用`hexo`组织博客内容
 
 - 创建新的博客
 
@@ -134,7 +136,7 @@ tags: [node, hexo]
   hexo new "postName"
   ```
 
-##  切换博客`theme`
+###  切换博客`theme`
 
 官方[网站](https://hexo.io/themes/)列出了很多不同风格的模板，网上的各种[推荐](https://www.zhihu.com/question/24422335/answer/3127401635)也很多，可根据自己的喜好选择
 
@@ -150,11 +152,11 @@ tags: [node, hexo]
 
   修改`_config.yml`中的`theme: landscape`改为`theme: yilia`，然后重新执行`hexo g`来重新生成
 
-# 设置远程Repo
+## 设置远程Repo
 
 此时已经有了一个本地的`repo`，可以实现`md`转网页，并预览，只要将这个网页托管到网站上，既可以实现博客部署。后续如果博客的内容进行了修改，只要使用`hexo`重新生成后，将生成的网页内容`push`到远程，即可实现博客更新
 
-## 在GitHub和创建repo
+### 在GitHub和创建repo
 
 - 创建一个名为`{github_username}.github.io`的`repo`
 
@@ -170,7 +172,7 @@ tags: [node, hexo]
 
 ![指定github pages 目录](https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202310152308113.png)
 
-## 推送设置
+### 推送设置
 
 上文中设置了静态网页文件目录为`~/docs`，故需要在本地文件中进行配置
 

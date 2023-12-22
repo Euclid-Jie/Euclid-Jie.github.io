@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="对于送入网络的feature，希望通过pca降维的方法，尽可能保留信息的情况下，减少模型参数，以缩短训练和推理时间，甚至有可能减少数据中的噪声？ 但pca为纯线性变换，且没有考虑对目标的优化，进一步可以使用vae方法 主成分分析法 PCA理论简单来说就是把高纬数据，投影到低维，不过肯定会有信息损失，一般保留80%的信息，或者指定保留多少个主成分。 具体的操作老师讲过证明，但是具体推导和证明我不记得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCA impl with python">
+<meta property="og:url" content="https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/index.html">
+<meta property="og:site_name" content="Euclid Jie&#39;s Blog">
+<meta property="og:description" content="对于送入网络的feature，希望通过pca降维的方法，尽可能保留信息的情况下，减少模型参数，以缩短训练和推理时间，甚至有可能减少数据中的噪声？ 但pca为纯线性变换，且没有考虑对目标的优化，进一步可以使用vae方法 主成分分析法 PCA理论简单来说就是把高纬数据，投影到低维，不过肯定会有信息损失，一般保留80%的信息，或者指定保留多少个主成分。 具体的操作老师讲过证明，但是具体推导和证明我不记得">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-22T14:33:06.000Z">
+<meta property="article:modified_time" content="2023-12-22T15:25:28.993Z">
+<meta property="article:author" content="Euclid Jie">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          
+            <link rel="shortcut icon" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=48">
+          
+        
+      
+      
+        
+          
+            <link rel="icon" type="image/png" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=192" sizes="192x192">
+          
+        
+      
+      
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=180">
+          
+        
+      
+    
+    <!-- title -->
+    <title>PCA impl with python</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/12/21/Tensor-s-Grad/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&text=PCA impl with python"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&is_video=false&description=PCA impl with python"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PCA impl with python&body=Check out this article: https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&name=PCA impl with python&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&t=PCA impl with python"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90%E6%B3%95-PCA"><span class="toc-number">1.</span> <span class="toc-text">主成分分析法 PCA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%90%86%E8%AE%BA"><span class="toc-number">2.</span> <span class="toc-text">理论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python-%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">python 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E6%96%B9%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">全量方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E6%96%B9%E5%BC%8F"><span class="toc-number">3.2.</span> <span class="toc-text">增量方式</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        PCA impl with python
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Euclid Jie</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-22T14:33:06.000Z" class="dt-published" itemprop="datePublished">2023-12-22</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Statistics/">Statistics</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/python/" rel="tag">python</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>对于送入网络的<code>feature</code>，希望通过<code>pca</code>降维的方法，尽可能保留信息的情况下，减少模型参数，以缩短训练和推理时间，甚至有可能减少数据中的噪声？</p>
+<p>但<code>pca</code>为纯线性变换，且没有考虑对目标的优化，进一步可以使用<code>vae</code>方法</p>
+<h2 id="主成分分析法-PCA"><a href="#主成分分析法-PCA" class="headerlink" title="主成分分析法 PCA"></a>主成分分析法 <code>PCA</code></h2><h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><p>简单来说就是把高纬数据，投影到低维，不过肯定会有信息损失，一般保留80%的信息，或者指定保留多少个主成分。</p>
+<p>具体的操作老师讲过证明，但是具体推导和证明我不记得了，反正就是对原始矩阵（假设大小为<code>(N,T)</code>）进行特征分解，得到特征值和特征向量，选取特征值大的对应的特征向量（大小为<code>(N,t)</code>)作为基，矩阵相乘（结果的大小为<code>(N,t)</code>）即得到<code>t</code>个主成分，而这个<code>(N,t)</code>大小的矩阵，即作为压缩后的特征</p>
+<h2 id="python-实现"><a href="#python-实现" class="headerlink" title="python 实现"></a><code>python</code> 实现</h2><p>使用<code>python</code>实现，这里直接调用<code>sklearn</code>中的包实现，只不过记录两种方式，一种是全量，一种是增量。</p>
+<h3 id="全量方式"><a href="#全量方式" class="headerlink" title="全量方式"></a>全量方式</h3><p>直接读取所有数据，然后喂给<code>PCA</code>，即完成主成分分析，需要注意的点有</p>
+<ul>
+<li>原始数据的<code>shape</code>为（数据点数量，特征个数），一般来说数据点数量 &gt;&#x3D; 特征个数</li>
+<li>无需对原始数据做标准化，<code>sklearn</code>会帮你做</li>
+<li>创建<code>pca</code>时候，需要指定预期保留的主成分个数，要小于特征个数</li>
+<li>调用<code>fit_transform</code>后返回的是主成分，也就是压缩后的特征</li>
+<li><code>explained_variance_sum</code>为主成分能够解释的原始数据中的变差占比</li>
+<li><code>components</code>的为拟合出来的一组基，再拿到<code>(N,T)</code>的数据，直接可以计算得到主成分，$(N,T) * (T,t)  \to (N,t)$</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"><span class="comment"># shape = (N, T)</span></span><br><span class="line">data = np.random.rand(<span class="number">100</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 1: Create an instance of PCA</span></span><br><span class="line">pca = PCA(n_components=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 2: Fit the data and transform it</span></span><br><span class="line">reduced_data = pca.fit_transform(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 3: calculate the explained variance</span></span><br><span class="line">explained_variance = pca.explained_variance_ratio_</span><br><span class="line">explained_variance_sum = explained_variance.<span class="built_in">sum</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;explained_variance_sum&quot;</span>, explained_variance_sum)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 4: Get the components</span></span><br><span class="line"><span class="comment"># shape = (t, T)</span></span><br><span class="line">components = pca.components_</span><br></pre></td></tr></table></figure>
+
+<h3 id="增量方式"><a href="#增量方式" class="headerlink" title="增量方式"></a>增量方式</h3><p>有时候数据量很大，需要分块拟合，也可能是<code>dataloader</code>的形式，需要一次又一次喂给<code>pca</code>，这时候需要增量方式，官方文档<a target="_blank" rel="noopener" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.IncrementalPCA.html">sklearn.decomposition.IncrementalPCA</a></p>
+<p>如果是挨个喂，这样写</p>
+<blockquote>
+<p>这里只是<code>fit</code>，目的是获取基，挨个喂使用的是<code>partial_fit</code>，而非<code>fit</code></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> IncrementalPCA</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 1: Create an instance of PCA</span></span><br><span class="line">ipca = IncrementalPCA(n_components=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 2: Fit the data step by step</span></span><br><span class="line"><span class="keyword">for</span> feature_batch <span class="keyword">in</span> feature_list:</span><br><span class="line">    ipca.partial_fit(feature_batch)</span><br></pre></td></tr></table></figure>
+
+<p>如果是希望它自己分块</p>
+<blockquote>
+<p>这里只是<code>fit</code>，目的是获取基</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> IncrementalPCA</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 1: Create an instance of PCA</span></span><br><span class="line">ipca = IncrementalPCA(n_components=<span class="number">100</span>,batch_size=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Step 2: Fit the data step by step</span></span><br><span class="line">ipca.fit(all_feature)</span><br></pre></td></tr></table></figure>
+
+<p>最后获得主成分、已解释变差、基的方式是一样的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 主成分</span></span><br><span class="line">ipca.fit_transform(data)</span><br><span class="line"><span class="comment"># 已解释变差</span></span><br><span class="line">ipca.explained_variance_ratio_.<span class="built_in">sum</span>()</span><br><span class="line"><span class="comment"># 基</span></span><br><span class="line">ipca.components_</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90%E6%B3%95-PCA"><span class="toc-number">1.</span> <span class="toc-text">主成分分析法 PCA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%90%86%E8%AE%BA"><span class="toc-number">2.</span> <span class="toc-text">理论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python-%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">python 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E6%96%B9%E5%BC%8F"><span class="toc-number">3.1.</span> <span class="toc-text">全量方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E6%96%B9%E5%BC%8F"><span class="toc-number">3.2.</span> <span class="toc-text">增量方式</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&text=PCA impl with python"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&is_video=false&description=PCA impl with python"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PCA impl with python&body=Check out this article: https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&title=PCA impl with python"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&name=PCA impl with python&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2023/12/22/PCA-impl-with-python/&t=PCA impl with python"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    Euclid Jie
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

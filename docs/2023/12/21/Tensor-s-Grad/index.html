@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="张量 Tensor 的 梯度 grad何为梯度 grad记录loss对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用tensor.requires_grad查询张量是否带梯度 123456789101112import torchtensor_demo &#x3D; torch.tensor([[1,2,3],[4,5,6]])# 返回False说明不带gradtensor_demo.r">
+    <meta name="description" content="何为梯度 grad记录loss对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用tensor.requires_grad查询张量是否带梯度 123456789101112import torchtensor_demo &#x3D; torch.tensor([[1,2,3],[4,5,6]])# 返回False说明不带gradtensor_demo.requires_grad# 创建一个带">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tensor&#39;s Grad">
 <meta property="og:url" content="https://euclid-jie.github.io/2023/12/21/Tensor-s-Grad/index.html">
 <meta property="og:site_name" content="Euclid Jie&#39;s Blog">
-<meta property="og:description" content="张量 Tensor 的 梯度 grad何为梯度 grad记录loss对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用tensor.requires_grad查询张量是否带梯度 123456789101112import torchtensor_demo &#x3D; torch.tensor([[1,2,3],[4,5,6]])# 返回False说明不带gradtensor_demo.r">
+<meta property="og:description" content="何为梯度 grad记录loss对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用tensor.requires_grad查询张量是否带梯度 123456789101112import torchtensor_demo &#x3D; torch.tensor([[1,2,3],[4,5,6]])# 返回False说明不带gradtensor_demo.requires_grad# 创建一个带">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-12-21T15:14:34.000Z">
-<meta property="article:modified_time" content="2023-12-21T15:21:40.805Z">
+<meta property="article:modified_time" content="2023-12-22T12:54:46.432Z">
 <meta property="article:author" content="Euclid Jie">
 <meta property="article:tag" content="python">
 <meta property="article:tag" content="torch">
@@ -23,17 +23,23 @@
     
       
         
-          <link rel="shortcut icon" href="/images/favicon.ico">
+          
+            <link rel="shortcut icon" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=48">
+          
         
       
       
         
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+            <link rel="icon" type="image/png" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=192" sizes="192x192">
+          
         
       
       
         
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=180">
+          
         
       
     
@@ -56,6 +62,16 @@
     
     
 	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 	
 <meta name="generator" content="Hexo 6.3.0"></head>
 
@@ -82,6 +98,8 @@
     <br/>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/12/22/PCA-impl-with-python/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Next post" href="/2023/10/26/demo-markdown-format-test/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -114,7 +132,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%A0%E9%87%8F-Tensor-%E7%9A%84-%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.</span> <span class="toc-text">张量 Tensor 的 梯度 grad</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E4%B8%BA%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.1.</span> <span class="toc-text">何为梯度 grad</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#grad%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">grad有什么用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%85%E7%A9%BA%E5%8D%95%E4%B8%AA%E5%BC%A0%E9%87%8F%E7%9A%84grad"><span class="toc-number">3.</span> <span class="toc-text">清空单个张量的grad</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86grad-%E8%BD%AC%E4%B8%BA-feature-importance"><span class="toc-number">4.</span> <span class="toc-text">将grad 转为 feature importance</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%95%E4%B8%BA%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.</span> <span class="toc-text">何为梯度 grad</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#grad%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">grad有什么用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E7%A9%BA%E5%8D%95%E4%B8%AA%E5%BC%A0%E9%87%8F%E7%9A%84grad"><span class="toc-number">3.</span> <span class="toc-text">清空单个张量的grad</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86grad-%E8%BD%AC%E4%B8%BA-feature-importance"><span class="toc-number">4.</span> <span class="toc-text">将grad 转为 feature importance</span></a></li></ol>
       </div>
     
   </span>
@@ -159,12 +177,10 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="张量-Tensor-的-梯度-grad"><a href="#张量-Tensor-的-梯度-grad" class="headerlink" title="张量 Tensor 的 梯度 grad"></a>张量 <code>Tensor</code> 的 梯度 <code>grad</code></h1><h2 id="何为梯度-grad"><a href="#何为梯度-grad" class="headerlink" title="何为梯度 grad"></a>何为梯度 <code>grad</code></h2><p>记录<code>loss</code>对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用<code>tensor.requires_grad</code>查询张量是否带梯度</p>
+    <h3 id="何为梯度-grad"><a href="#何为梯度-grad" class="headerlink" title="何为梯度 grad"></a>何为梯度 <code>grad</code></h3><p>记录<code>loss</code>对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用<code>tensor.requires_grad</code>查询张量是否带梯度</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">tensor_demo = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line"><span class="comment"># 返回False说明不带grad</span></span><br><span class="line">tensor_demo.requires_grad</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个带有grad的张量</span></span><br><span class="line"><span class="comment"># 注意，int不能带有grad，故使用float32</span></span><br><span class="line">tensor_demo = torch.tensor(</span><br><span class="line">    [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]], dtype=torch.float32, requires_grad=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"><span class="comment"># 返回True说明这是一个带grad的张量</span></span><br><span class="line">tensor_demo.requires_grad</span><br></pre></td></tr></table></figure>
 
-
-
-<h1 id="grad有什么用"><a href="#grad有什么用" class="headerlink" title="grad有什么用"></a><code>grad</code>有什么用</h1><p>可以利用<code>torch</code>的自动求导特性，得到<code>loss</code>关于次参数的导数，并利用此导数进行参数更新</p>
+<h3 id="grad有什么用"><a href="#grad有什么用" class="headerlink" title="grad有什么用"></a><code>grad</code>有什么用</h3><p>可以利用<code>torch</code>的自动求导特性，得到<code>loss</code>关于次参数的导数，并利用此导数进行参数更新</p>
 <p>具体而言，模型的一个<code>epoch</code>有这么五步</p>
 <blockquote>
 <p>如果模型的设计是，参数是每个<code>step</code>更新，那每个<code>step</code>都有这么几步</p>
@@ -185,8 +201,7 @@
 <li><p>将模型所有参数的<code>grad</code>重置为0</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer.zero_grad()</span><br></pre></td></tr></table></figure></li>
 </ol>
-<p>​	</p>
-<h1 id="清空单个张量的grad"><a href="#清空单个张量的grad" class="headerlink" title="清空单个张量的grad"></a>清空单个张量的<code>grad</code></h1><p>当张量被初始化时，是没有梯度，是不用清空的，此时<code>grad</code>为<code>None</code></p>
+<h3 id="清空单个张量的grad"><a href="#清空单个张量的grad" class="headerlink" title="清空单个张量的grad"></a>清空单个张量的<code>grad</code></h3><p>当张量被初始化时，是没有梯度，是不用清空的，此时<code>grad</code>为<code>None</code></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">tensor_demo = torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]],dtype=torch.float32).requires_grad_(<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 啥也不返回说明grad是None</span></span><br><span class="line">tensor_demo.grad</span><br></pre></td></tr></table></figure>
 
 <p>一旦基于此<code>tensor</code>的计算的值进行了<code>backward</code>，也就是依据计算图计算了各个参数的grad，此<code>tensor</code>附带的<code>grad</code>就不是<code>None</code>了</p>
@@ -195,9 +210,7 @@
 <p>梯度在每次<code>backward</code>是不会被覆盖的，而是累计，所以需要手动清空，这里的清空是指将梯度设置为0；需要注意的是如果<code>grad</code>是<code>None</code>，是不能被清空的</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> tensor_demo.grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;grad is not None, will set grad to zeros&quot;</span>)</span><br><span class="line">    tensor_demo.grad.zero_()</span><br><span class="line"><span class="comment"># 如果grad不是None，将被重置为0</span></span><br><span class="line">tensor_demo.grad</span><br></pre></td></tr></table></figure>
 
-
-
-<h1 id="将grad-转为-feature-importance"><a href="#将grad-转为-feature-importance" class="headerlink" title="将grad 转为 feature importance"></a>将<code>grad</code> 转为 <code>feature importance</code></h1><p>对<code>feature</code>添加<code>grad</code>，进行<code>backward</code>后，基于<code>grad</code>计算<code>feature importance</code></p>
+<h3 id="将grad-转为-feature-importance"><a href="#将grad-转为-feature-importance" class="headerlink" title="将grad 转为 feature importance"></a>将<code>grad</code> 转为 <code>feature importance</code></h3><p>对<code>feature</code>添加<code>grad</code>，进行<code>backward</code>后，基于<code>grad</code>计算<code>feature importance</code></p>
 <ol>
 <li><p>读取模型参数，使用模型预测</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">model = DailyNet.load_from_checkpoint(</span><br><span class="line">    Path(<span class="string">&quot;epoch04.ckpt&quot;</span>),</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 如果模型中有dropout等层，需要进行处理，否则后续操作有随机性</span></span><br><span class="line">model._gru_block._gru.dropout = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以将参数的梯度去掉, 并不影响featuer的grad计算</span></span><br><span class="line"><span class="comment"># for param in model.parameters():</span></span><br><span class="line"><span class="comment">#     param.detach_()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># NOTE 需要给feature添加grad</span></span><br><span class="line">input_feature = input_feature.requires_grad_(<span class="literal">True</span>)</span><br><span class="line">preds = model(input_feature).cpu()</span><br></pre></td></tr></table></figure>
@@ -238,7 +251,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%A0%E9%87%8F-Tensor-%E7%9A%84-%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.</span> <span class="toc-text">张量 Tensor 的 梯度 grad</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E4%B8%BA%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.1.</span> <span class="toc-text">何为梯度 grad</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#grad%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">grad有什么用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%85%E7%A9%BA%E5%8D%95%E4%B8%AA%E5%BC%A0%E9%87%8F%E7%9A%84grad"><span class="toc-number">3.</span> <span class="toc-text">清空单个张量的grad</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86grad-%E8%BD%AC%E4%B8%BA-feature-importance"><span class="toc-number">4.</span> <span class="toc-text">将grad 转为 feature importance</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%95%E4%B8%BA%E6%A2%AF%E5%BA%A6-grad"><span class="toc-number">1.</span> <span class="toc-text">何为梯度 grad</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#grad%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">grad有什么用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E7%A9%BA%E5%8D%95%E4%B8%AA%E5%BC%A0%E9%87%8F%E7%9A%84grad"><span class="toc-number">3.</span> <span class="toc-text">清空单个张量的grad</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86grad-%E8%BD%AC%E4%B8%BA-feature-importance"><span class="toc-number">4.</span> <span class="toc-text">将grad 转为 feature importance</span></a></li></ol>
       </div>
     
 
@@ -277,7 +290,7 @@
     Copyright &copy;
     
     
-    2016-2023
+    2023
     Euclid Jie
   </div>
   <div class="footer-right">

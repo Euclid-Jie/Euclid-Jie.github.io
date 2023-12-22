@@ -3,9 +3,7 @@ title: Tensor's Grad
 date: 2023-12-21 23:14:34
 tags: [python, torch]
 ---
-# 张量 `Tensor` 的 梯度 `grad`
-
-# 何为梯度 `grad`
+### 何为梯度 `grad`
 
 记录`loss`对参数的偏导，用于更新参数，模型训练的时候，默认为参数创建，可以使用`tensor.requires_grad`查询张量是否带梯度
 
@@ -24,7 +22,7 @@ tensor_demo = torch.tensor(
 tensor_demo.requires_grad
 ```
 
-# `grad`有什么用
+### `grad`有什么用
 
 可以利用`torch`的自动求导特性，得到`loss`关于次参数的导数，并利用此导数进行参数更新
 
@@ -62,7 +60,7 @@ tensor_demo.requires_grad
    optimizer.zero_grad()
    ```
 
-# 清空单个张量的`grad`
+### 清空单个张量的`grad`
 
 当张量被初始化时，是没有梯度，是不用清空的，此时`grad`为`None`
 
@@ -96,7 +94,7 @@ if tensor_demo.grad is not None:
 tensor_demo.grad
 ```
 
-# 将`grad` 转为 `feature importance`
+### 将`grad` 转为 `feature importance`
 
 对`feature`添加`grad`，进行`backward`后，基于`grad`计算`feature importance`
 
