@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="最近在琢磨定时执行任务，实现对微博热搜榜单的抓取，并实现存档。 最开始以为需要一台服务器，但是我发现了gtihub action这个好东西，对于简单的python任务，最快可以每5min执行一次。 借助github action，我的想法很快落地，项目地址为：Euclid-Jie&#x2F;weibo_hotlist GitHub Action简介 GitHub Actions 文档 - GitH">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Useful GitHub Action">
+<meta property="og:url" content="https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/index.html">
+<meta property="og:site_name" content="Euclid Jie&#39;s Blog">
+<meta property="og:description" content="最近在琢磨定时执行任务，实现对微博热搜榜单的抓取，并实现存档。 最开始以为需要一台服务器，但是我发现了gtihub action这个好东西，对于简单的python任务，最快可以每5min执行一次。 借助github action，我的想法很快落地，项目地址为：Euclid-Jie&#x2F;weibo_hotlist GitHub Action简介 GitHub Actions 文档 - GitH">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202312252316187.png">
+<meta property="article:published_time" content="2023-12-25T14:51:26.000Z">
+<meta property="article:modified_time" content="2023-12-25T15:22:54.277Z">
+<meta property="article:author" content="Euclid Jie">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="github">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202312252316187.png">
+    
+    
+      
+        
+          
+            <link rel="shortcut icon" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=48">
+          
+        
+      
+      
+        
+          
+            <link rel="icon" type="image/png" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=192" sizes="192x192">
+          
+        
+      
+      
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=180">
+          
+        
+      
+    
+    <!-- title -->
+    <title>Useful GitHub Action</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/12/22/PCA-impl-with-python/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&text=Useful GitHub Action"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&is_video=false&description=Useful GitHub Action"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Useful GitHub Action&body=Check out this article: https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&name=Useful GitHub Action&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&t=Useful GitHub Action"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-Action"><span class="toc-number">1.</span> <span class="toc-text">GitHub Action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-use"><span class="toc-number">2.</span> <span class="toc-text">How to use</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%9C%9F%E6%89%A7%E8%A1%8Cpython%E7%A8%8B%E5%BA%8F"><span class="toc-number">2.1.</span> <span class="toc-text">定期执行python程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E4%B8%AA%E6%9C%88%E8%BF%9B%E8%A1%8C%E5%AD%98%E6%A1%A3"><span class="toc-number">2.2.</span> <span class="toc-text">每个月进行存档</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Useful GitHub Action
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Euclid Jie</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-25T14:51:26.000Z" class="dt-published" itemprop="datePublished">2023-12-25</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/github/" rel="tag">github</a>, <a class="p-category" href="/tags/python/" rel="tag">python</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>最近在琢磨定时执行任务，实现对微博热搜榜单的抓取，并实现存档。</p>
+<p>最开始以为需要一台服务器，但是我发现了<code>gtihub action</code>这个好东西，对于简单的<code>python</code>任务，最快可以每<code>5min</code>执行一次。</p>
+<p>借助<code>github action</code>，我的想法很快落地，项目地址为：<a target="_blank" rel="noopener" href="https://github.com/Euclid-Jie/weibo_hotlist">Euclid-Jie&#x2F;weibo_hotlist</a></p>
+<h2 id="GitHub-Action"><a href="#GitHub-Action" class="headerlink" title="GitHub Action"></a>GitHub Action</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.github.com/zh/actions">GitHub Actions 文档 - GitHub 文档</a></p>
+</blockquote>
+<p>在<code>repo</code>里的<code>.github/workflows</code>下配置一个<code>.yml</code>文件，<code>github</code>就会提供一个执行环境，按照此<code>.yml</code>中的步骤进行执行，可以设置为定时任务，或者是被某个动作触发执行，例如<code>push</code>，<code>pull request</code>等</p>
+<h2 id="How-to-use"><a href="#How-to-use" class="headerlink" title="How to use"></a>How to use</h2><p>其实这个很简单，直接上例子，并配上说明</p>
+<h3 id="定期执行python程序"><a href="#定期执行python程序" class="headerlink" title="定期执行python程序"></a>定期执行<code>python</code>程序</h3><p>主要流程为在<code>github</code>提供的运行机器上，<code>clone repo</code> -&gt; <code>checkout branch</code> -&gt; <code>run start.sh</code>运行程序抓取数据比写入 -&gt; 使用<code>git</code>提交代码并<code>push</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">5min定时抓取</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">workflow_dispatch:</span></span><br><span class="line">  <span class="attr">schedule:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">cron:</span> <span class="string">&#x27;*/5 * * * *&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@main</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">persist-credentials:</span> <span class="literal">false</span></span><br><span class="line">          <span class="attr">fetch-depth:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">run</span> <span class="string">start.sh</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          pip install pandas</span></span><br><span class="line"><span class="string">          bash ./start.sh</span></span><br><span class="line"><span class="string"></span>          </span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">timestamp</span></span><br><span class="line">        <span class="attr">id:</span> <span class="string">timestamp</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">echo</span> <span class="string">&quot;::set-output name=timestamp::$(date +&#x27;%Y-%m-%d %H:%M&#x27;)&quot;</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Git</span> <span class="string">add</span> <span class="string">and</span> <span class="string">commit</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          git config --global user.email &quot;ouweijie123@outlook.com&quot;</span></span><br><span class="line"><span class="string">          git config --global user.name &quot;crawer actioner&quot;</span></span><br><span class="line"><span class="string">          git add .</span></span><br><span class="line"><span class="string">          git commit -m &quot;craw_5minly_$&#123;&#123; steps.timestamp.outputs.timestamp &#125;&#125;&quot;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GitHub</span> <span class="string">Push</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">ad-m/github-push-action@master</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">github_token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.REPO_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>以上<code>.yml</code>中需要注意的点有：</p>
+<ol>
+<li><p><code>cron: &#39;*/5 * * * *&#39;</code>实现了每<code>5min</code>执行一次，但事实上可能比这个频率低，<code>1h</code>运行较为稳定</p>
+</li>
+<li><p>其中执行<code>python</code>的是<code>.sh</code>，具体内容为<code>python3 ./weibo_hot_list_serach.py</code></p>
+</li>
+<li><p>使用<code>git</code>需要配置<code>name</code>和<code>mail</code>，其中<code>name</code>是必须的</p>
+</li>
+<li><p>使用<code>git push</code>时，需要开启<code>action</code>的权限，不然会报错，如图</p>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202312252316187.png" alt="image-20231225231602980"></p>
+</li>
+<li><p>如果这个<code>repo</code>是公开的，<code>secrets.REPO_TOKEN</code>是非必须的</p>
+</li>
+</ol>
+<h3 id="每个月进行存档"><a href="#每个月进行存档" class="headerlink" title="每个月进行存档"></a>每个月进行存档</h3><p>主要流程为在<code>github</code>提供的运行机器上，<code>clone repo</code> -&gt; <code>checkout branch</code> -&gt; 将<code>hotlist</code>目录下的<code>.csv</code>文件压缩到<code>archive</code>目录下，并删除原始<code>.csv</code>文件-&gt; 使用<code>git</code>提交代码并<code>push</code></p>
+<p>目的是为了减少<code>repo</code>的空间占用，压缩比率在$$15%$$左右</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">每月存档</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">workflow_dispatch:</span></span><br><span class="line">  <span class="attr">schedule:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">cron:</span> <span class="string">&#x27;0 0 1 * *&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Checkout</span> <span class="string">code</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@main</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Create</span> <span class="string">archive</span> <span class="string">directory</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          if [ ! -d &quot;archive&quot; ]; then</span></span><br><span class="line"><span class="string">            mkdir archive</span></span><br><span class="line"><span class="string">          fi</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">timestamp</span></span><br><span class="line">        <span class="attr">id:</span> <span class="string">timestamp</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">echo</span> <span class="string">&quot;::set-output name=timestamp::$(date +&#x27;%Y-%m&#x27;)&quot;</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Create</span> <span class="string">archive</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">tar</span> <span class="string">-czvf</span> <span class="string">&quot;archive/monthly_archive_$<span class="template-variable">&#123;&#123; steps.timestamp.outputs.timestamp &#125;&#125;</span>.tar.gz&quot;</span> <span class="string">hotlist/*.csv</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Delete</span> <span class="string">original</span> <span class="string">data</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">rm</span> <span class="string">-rf</span> <span class="string">hotlist/*.csv</span></span><br><span class="line"></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Git</span> <span class="string">add</span> <span class="string">and</span> <span class="string">commit</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          git config --global user.email &quot;ouweijie123@outlook.com&quot;</span></span><br><span class="line"><span class="string">          git config --global user.name &quot;archiver actioner&quot;</span></span><br><span class="line"><span class="string">          git add .</span></span><br><span class="line"><span class="string">          git commit -m &quot;monthly_archive_$&#123;&#123; steps.timestamp.outputs.timestamp &#125;&#125;&quot;</span></span><br><span class="line"><span class="string">          git push</span></span><br></pre></td></tr></table></figure>
+
+<p>以上<code>.yml</code>中需要注意的点有：</p>
+<p>先看上个<a href="###%E5%AE%9A%E6%9C%9F%E6%89%A7%E8%A1%8C%60python%60%E7%A8%8B%E5%BA%8F">例子</a>中的注意事项</p>
+<ol>
+<li><p><code>cron: &#39;0 0 1 * *&#39;</code>实现了每个月的1号执行一次</p>
+</li>
+<li><p>直接进行<code>git push</code>也行，不一定要使用别人的工具</p>
+</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-Action"><span class="toc-number">1.</span> <span class="toc-text">GitHub Action</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">简介</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-use"><span class="toc-number">2.</span> <span class="toc-text">How to use</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%9C%9F%E6%89%A7%E8%A1%8Cpython%E7%A8%8B%E5%BA%8F"><span class="toc-number">2.1.</span> <span class="toc-text">定期执行python程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8F%E4%B8%AA%E6%9C%88%E8%BF%9B%E8%A1%8C%E5%AD%98%E6%A1%A3"><span class="toc-number">2.2.</span> <span class="toc-text">每个月进行存档</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&text=Useful GitHub Action"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&is_video=false&description=Useful GitHub Action"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Useful GitHub Action&body=Check out this article: https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&title=Useful GitHub Action"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&name=Useful GitHub Action&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2023/12/25/Useful-GitHub-Action/&t=Useful GitHub Action"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    Euclid Jie
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
