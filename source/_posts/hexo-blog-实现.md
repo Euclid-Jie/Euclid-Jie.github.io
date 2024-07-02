@@ -118,12 +118,18 @@ tags:
   hexo g
   ```
 
+  > 如果想要清空生成的内容，使用
+  ```shell
+  hexo clean
+  ```
+
 - 预览网页
 
-  会在本地4000端口生成一个网页，可以进行预览，后续只要把这个网页托管到githug.io或自己的服务器并绑定域名，既可以实现个人博客构建
+  会在本地4000端口生成一个网页(也可以指定端口），可以进行预览，后续只要把这个网页托管到githug.io或自己的服务器并绑定域名，既可以实现个人博客构建
 
   ```shell
   hexo s
+  hexo s -p 90000
   ```
 
 ### 使用`hexo`组织博客内容
@@ -147,6 +153,11 @@ tags:
   ```shell
   git clone https://github.com/probberechts/hexo-theme-cactus.git themes/cactus
   ```
+  由于我对主题的部分细节进行了修改，所以需要`clone`fork的版本
+  ```shell
+  git clone git@github.com:Euclid-Jie/hexo-theme-cactus.git themes/cactus
+  ```
+  
 
 - 修改配置文件
 
