@@ -617,9 +617,9 @@ hexo-util@^3.0.1, hexo-util@^3.1.0, hexo-util@^3.3.0:
     prismjs "^1.29.0"
     strip-indent "^3.0.0"
 
-hexo@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.npmmirror.com/hexo/-/hexo-7.2.0.tgz#0c2b0eeb3f16c557638b6dbd5956a425460d7d0f"
+hexo@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.npmmirror.com/hexo/-/hexo-7.3.0.tgz#a9a487874c5ed71c22e91e32dd5d825709a1474f"
   dependencies:
     abbrev "^2.0.0"
     archy "^1.0.0"
