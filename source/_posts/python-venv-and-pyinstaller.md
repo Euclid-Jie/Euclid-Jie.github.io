@@ -56,7 +56,7 @@ Python只是一个解释器，日常使用还需要一个IDE（集成开发环�
 
 最后你需要告诉VsCode你的Python解释器在哪。文件>新建文件>命名为`demo.py`，随即打开此文件，不出意外你在右下角会看到，提醒你选中Python解释器的位置。点击>选择解释器>输入解释器路径，然后选择你安装的python的位置，一般为"C:\Program Files\Python\Python312\python.exe"或者"C:\Users\Ouwei\AppData\Local\Programs\Python\Python312\python.exe"。至此配置结束。
 
-![image-20240801200451308](C:\Users\Ouwei\AppData\Roaming\Typora\typora-user-images\image-20240801200451308.png)
+![image-20240801200451308](https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202408012017826.png)
 
 > 以下内容下次再补充
 
@@ -67,3 +67,4 @@ Python只是一个解释器，日常使用还需要一个IDE（集成开发环�
 ### 打包Python
 
 将python代码打包为exe，方便分享和使用
+
