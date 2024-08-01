@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="新手教程导向，方案是python+vscode，使用虚拟环境（Venv），并使用pyinstaller打包程序  注：以下软件的下载链接试用于大部分Windows电脑，如果是其他系统，请另行处理  Python安装目前主流使用的python有两个大版本，分别是python2.X和python3.X，一般使用的都是python3.X，截至发文最新为python3.12。 下载及安装这是官网下载地址，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python venv and pyinstaller">
+<meta property="og:url" content="https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/index.html">
+<meta property="og:site_name" content="Euclid Jie&#39;s Blog">
+<meta property="og:description" content="新手教程导向，方案是python+vscode，使用虚拟环境（Venv），并使用pyinstaller打包程序  注：以下软件的下载链接试用于大部分Windows电脑，如果是其他系统，请另行处理  Python安装目前主流使用的python有两个大版本，分别是python2.X和python3.X，一般使用的都是python3.X，截至发文最新为python3.12。 下载及安装这是官网下载地址，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202408011956706.png">
+<meta property="og:image" content="c:\Users\Ouwei\AppData\Roaming\Typora\typora-user-images\image-20240801200451308.png">
+<meta property="article:published_time" content="2024-08-01T11:34:36.000Z">
+<meta property="article:modified_time" content="2024-08-01T12:11:30.635Z">
+<meta property="article:author" content="Euclid Jie">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202408011956706.png">
+    
+    
+      
+        
+          
+            <link rel="shortcut icon" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=48">
+          
+        
+      
+      
+        
+          
+            <link rel="icon" type="image/png" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=192" sizes="192x192">
+          
+        
+      
+      
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=180">
+          
+        
+      
+    
+    <!-- title -->
+    <title>python venv and pyinstaller</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/07/02/hello-world/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&text=python venv and pyinstaller"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&is_video=false&description=python venv and pyinstaller"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=python venv and pyinstaller&body=Check out this article: https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&name=python venv and pyinstaller&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&t=python venv and pyinstaller"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Python安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%8F%8A%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">下载及安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VsCode%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">VsCode安装及配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">虚拟环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%8C%85Python"><span class="toc-number">2.1.</span> <span class="toc-text">打包Python</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        python venv and pyinstaller
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Euclid Jie</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-08-01T11:34:36.000Z" class="dt-published" itemprop="datePublished">2024-08-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/tutorials/">tutorials</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/python/" rel="tag">python</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>新手教程导向，方案是python+vscode，使用虚拟环境（Venv），并使用pyinstaller打包程序</p>
+<blockquote>
+<p>注：以下软件的下载链接试用于大部分Windows电脑，如果是其他系统，请另行处理</p>
+</blockquote>
+<h2 id="Python安装"><a href="#Python安装" class="headerlink" title="Python安装"></a>Python安装</h2><p>目前主流使用的python有两个大版本，分别是python2.X和python3.X，一般使用的都是python3.X，截至发文最新为python3.12。</p>
+<h3 id="下载及安装"><a href="#下载及安装" class="headerlink" title="下载及安装"></a>下载及安装</h3><p>这是<a target="_blank" rel="noopener" href="https://www.python.org/ftp/python/3.12.4/python-3.12.4-amd64.exe">官网下载地址</a>，点击即可下载python3.12，因为神秘原因会比较慢，等不及的也可以找国内的镜像。</p>
+<p>下载完成后会看到一个<code>python-3.12.X-amd64.exe</code>的文件，双击既进行安装，不关心的话，一路点继续就行。</p>
+<h3 id="VsCode安装及配置"><a href="#VsCode安装及配置" class="headerlink" title="VsCode安装及配置"></a>VsCode安装及配置</h3><p>Python只是一个解释器，日常使用还需要一个IDE（集成开发环境），这里我推荐VsCode（主流的还有PyCharm）。VsCode官网<a target="_blank" rel="noopener" href="https://vscode.download.prss.microsoft.com/dbazure/download/stable/f1e16e1e6214d7c44d078b1f0607b2388f29d729/VSCodeUserSetup-x64-1.91.1.exe">下载地址</a>，点击即可下载。</p>
+<p>下载完成后会看到一个<code>VSCodeUserSetup-x64-X.X.X.exe</code>，同样是双击进行安装就好，不关心的话，一路点击继续就行。</p>
+<p>安装完成后，打开VsCode，需要安装一些插件，我将挨个说明：</p>
+<ul>
+<li><p>在哪安装插件</p>
+<p>如图所示，最左边有个四个方格的图标，是管理插件的地方，随即可以检索需要的插件名称，选中想要的插件，然后安装即可，一般安装后，会要求重启VsCode</p>
+<blockquote>
+<p>下图会与你看到的有出入，但是凭借你的聪明才智，一定可以找到每一步需要点击的地方！</p>
+</blockquote>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202408011956706.png" alt="image-20240801195608201"></p>
+</li>
+<li><p>安装中文插件，这样VsCode的界面就是中文（类似上图）</p>
+<p>插件名：Chinese (Simplified) </p>
+<p>简介：此中文（简体）语言包为 VS Code 提供本地化界面。</p>
+</li>
+<li><p>安装python插件，这样VsCode就能调用Python解释开展工作</p>
+<p>插件名：Python，点第一个，下载量最多的那个，发行商为Microsoft</p>
+<p>简介：专门为Python提供的插件。顺带说一句，VsCode还能作为C，C++，R等语言的IDE使用，很强大。</p>
+</li>
+<li><p>安装jupyter插件，这样就能使用notebook模式运行Python，获得”所见即所得“的体验</p>
+<p>插件名：Jupyter，点第一个，下载量最多的那个，发行商为Microsoft。安装此插件，会顺带安装一些其他的插件，不用关心。</p>
+<p>简介：适配使用notebook模式，进行Pyhton语言的编写和运行</p>
+</li>
+</ul>
+<p>最后你需要告诉VsCode你的Python解释器在哪。文件&gt;新建文件&gt;命名为<code>demo.py</code>，随即打开此文件，不出意外你在右下角会看到，提醒你选中Python解释器的位置。点击&gt;选择解释器&gt;输入解释器路径，然后选择你安装的python的位置，一般为”C:\Program Files\Python\Python312\python.exe”或者”C:\Users\Ouwei\AppData\Local\Programs\Python\Python312\python.exe”。至此配置结束。</p>
+<p><img src="C:\Users\Ouwei\AppData\Roaming\Typora\typora-user-images\image-20240801200451308.png" alt="image-20240801200451308"></p>
+<blockquote>
+<p>以下内容下次再补充</p>
+</blockquote>
+<h2 id="虚拟环境"><a href="#虚拟环境" class="headerlink" title="虚拟环境"></a>虚拟环境</h2><p>为什么要创建虚拟环境</p>
+<h3 id="打包Python"><a href="#打包Python" class="headerlink" title="打包Python"></a>打包Python</h3><p>将python代码打包为exe，方便分享和使用</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Python安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%8F%8A%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">下载及安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VsCode%E5%AE%89%E8%A3%85%E5%8F%8A%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">VsCode安装及配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">虚拟环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%8C%85Python"><span class="toc-number">2.1.</span> <span class="toc-text">打包Python</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&text=python venv and pyinstaller"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&is_video=false&description=python venv and pyinstaller"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=python venv and pyinstaller&body=Check out this article: https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&title=python venv and pyinstaller"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&name=python venv and pyinstaller&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2024/08/01/python-venv-and-pyinstaller/&t=python venv and pyinstaller"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-2024
+    Euclid Jie
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
