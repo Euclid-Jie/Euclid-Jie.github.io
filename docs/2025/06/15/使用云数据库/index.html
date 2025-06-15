@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="由于近期的工作需要依赖一些底层的数据，但是本人的设备比较多，而且除了我之外，还有其他人也会使用这些数据。所以建立一个云数据库很有必要。本次申请的是百度智能云的云数据库，年费+公网费用，一年开销在500元左右，还能接受，目前使用下来配置够用，具体规格如下：  配置流程申请反正阿里、腾讯、百度应该都有自己云平台，每家应该差不多，哪个便宜用哪个就成。百度的叫做百度智能云，注册+实名认证后来到云数据库选择">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用云数据库">
+<meta property="og:url" content="https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Euclid Jie&#39;s Blog">
+<meta property="og:description" content="由于近期的工作需要依赖一些底层的数据，但是本人的设备比较多，而且除了我之外，还有其他人也会使用这些数据。所以建立一个云数据库很有必要。本次申请的是百度智能云的云数据库，年费+公网费用，一年开销在500元左右，还能接受，目前使用下来配置够用，具体规格如下：  配置流程申请反正阿里、腾讯、百度应该都有自己云平台，每家应该差不多，哪个便宜用哪个就成。百度的叫做百度智能云，注册+实名认证后来到云数据库选择">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151551985.png">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151607099.png">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151612686.png">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151614488.png">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151621343.png">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151620203.png">
+<meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151623169.png">
+<meta property="article:published_time" content="2025-06-15T07:40:59.000Z">
+<meta property="article:modified_time" content="2025-06-15T08:25:35.356Z">
+<meta property="article:author" content="Euclid Jie">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151551985.png">
+    
+    
+      
+        
+          
+            <link rel="shortcut icon" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=48">
+          
+        
+      
+      
+        
+          
+            <link rel="icon" type="image/png" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=192" sizes="192x192">
+          
+        
+      
+      
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="https://www.gravatar.com/avatar/cea783e2485ab0708fb920ef9ca7faae?s=180">
+          
+        
+      
+    
+    <!-- title -->
+    <title>使用云数据库</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/01/17/OneDrive/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&text=使用云数据库"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&is_video=false&description=使用云数据库"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=使用云数据库&body=Check out this article: https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&name=使用云数据库&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&t=使用云数据库"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">配置流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AF%B7"><span class="toc-number">1.1.</span> <span class="toc-text">申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.3.</span> <span class="toc-text">连接</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        使用云数据库
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Euclid Jie</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-06-15T07:40:59.000Z" class="dt-published" itemprop="datePublished">2025-06-15</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/tools/">tools</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/SQL/" rel="tag">SQL</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>由于近期的工作需要依赖一些底层的数据，但是本人的设备比较多，而且除了我之外，还有其他人也会使用这些数据。所以建立一个云数据库很有必要。本次申请的是百度智能云的云数据库，年费+公网费用，一年开销在500元左右，还能接受，目前使用下来配置够用，具体规格如下：</p>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151551985.png" alt="image-20250615155140866"></p>
+<h2 id="配置流程"><a href="#配置流程" class="headerlink" title="配置流程"></a>配置流程</h2><h3 id="申请"><a href="#申请" class="headerlink" title="申请"></a>申请</h3><p>反正阿里、腾讯、百度应该都有自己云平台，每家应该差不多，哪个便宜用哪个就成。百度的叫做<a target="_blank" rel="noopener" href="https://cloud.baidu.com/">百度智能云</a>，注册+实名认证后来到云数据库选择 <code>GaiaDB</code> 申请，因为这个最便宜，当成 <code>MySql</code> 使用没问题。</p>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151607099.png" alt="image-20250615160743927"></p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>配置没啥好说的，反正是选择地区，合适的配置即可。需要强调的是，如果是要走公网IP进行连接，则涉及到另外一个费用 <a target="_blank" rel="noopener" href="https://console.bce.baidu.com/eip/#/eip/instance/create"><code>弹性公网IP</code></a>。这有个坑，区域要选择和你云数据库的同一个区域，费用是一个月23元。</p>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151612686.png" alt="image-20250615161241547"></p>
+<p>然后就是设置白名单和公网绑定到云数据库上，白名单就是自己设备的IP，然后将刚刚购买的公网IP绑定到云数据库即可。</p>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151614488.png" alt="image-20250615161437321"></p>
+<p>数据库的设置，是用户权限和数据库的创建，也都是在控制台设置，分别如下</p>
+<blockquote>
+<p>权限上只要一个高权限，多人使用的话，建议这里权限设置一定谨慎点</p>
+</blockquote>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151621343.png" alt="image-20250615162121246"></p>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151620203.png" alt="image-20250615162055053"></p>
+<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><p>使用DBeaver或者其他的软件都可以，反正 <code>Host</code> 写那个公网IP就成，如下是一个示例</p>
+<blockquote>
+<p>安利一个简洁的客户端，<a target="_blank" rel="noopener" href="https://tableplus.com/">TablePlus</a>，特别是有直接修改数据库需求的，很合适。秘钥可以淘宝买；</p>
+</blockquote>
+<p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202506151623169.png" alt="image-20250615162333952"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">配置流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AF%B7"><span class="toc-number">1.1.</span> <span class="toc-text">申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.3.</span> <span class="toc-text">连接</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&text=使用云数据库"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&is_video=false&description=使用云数据库"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=使用云数据库&body=Check out this article: https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&title=使用云数据库"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&name=使用云数据库&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://euclid-jie.github.io/2025/06/15/%E4%BD%BF%E7%94%A8%E4%BA%91%E6%95%B0%E6%8D%AE%E5%BA%93/&t=使用云数据库"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-2025
+    Euclid Jie
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Euclid-Jie">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
