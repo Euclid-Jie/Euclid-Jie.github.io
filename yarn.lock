@@ -1382,10 +1382,10 @@ statuses@~1.5.0:
   resolved "https://registry.npmmirror.com/statuses/-/statuses-1.5.0.tgz"
   integrity sha512-OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==
 
-string-width@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.npmmirror.com/string-width/-/string-width-8.0.0.tgz#45c7ff976e32e4590a3050187e2402809d69772e"
-  integrity sha512-k6IAvw5ubuVp/NNXUXFoOZFUGa+GY369bYTwG55AEq6s1XLurtpjdookJ+vI8TdxFS/X7oz2xI1giGh6nK6mog==
+string-width@^8.1.1:
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/string-width/-/string-width-8.1.1.tgz#9b5aa0df72e3f232611c57fd47eb41dd97866bd3"
+  integrity sha512-KpqHIdDL9KwYk22wEOg/VIqYbrnLeSApsKT/bSj6Ez7pn3CftUiLAv2Lccpq1ALcpLV9UX1Ppn92npZWu2w/aw==
   dependencies:
     get-east-asian-width "^1.3.0"
     strip-ansi "^7.1.0"
