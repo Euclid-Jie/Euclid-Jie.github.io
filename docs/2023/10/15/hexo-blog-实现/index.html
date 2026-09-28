@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="主要参照于此文，但是针对自己的需求做了一些改变  准备工作安装node.js&#96;&#96;node.js是js运行的必要条件，关于node.js&#96;的安装，各种教程很多，直接从官网下载安装即可  检测是否安装成功   在cmd中运行以下代码，如果返回版本号，即成功    1node -v   npm工具 安装node.js会附赠此工具，npm用于管理node.js的包，对我而言，我将">
+    <meta name="description" content="主要参照于此文，但是针对自己的需求做了一些改变   更新（2026-09）：现在不再全局安装 hexo，改为用 package.json 里的 npm 脚本调用项目内的 Hexo。原因见下面「本地写作命令速查」。  本地写作命令速查（2026-09 更新）所有命令都在博客仓库根目录（Euclid-Jie.github.io）下执行。    作用 现在的命令 对应的原生命令    新建文章 npm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hexo blog 实现">
 <meta property="og:url" content="https://euclid-jie.github.io/2023/10/15/hexo-blog-%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="Euclid Jie&#39;s Blog">
-<meta property="og:description" content="主要参照于此文，但是针对自己的需求做了一些改变  准备工作安装node.js&#96;&#96;node.js是js运行的必要条件，关于node.js&#96;的安装，各种教程很多，直接从官网下载安装即可  检测是否安装成功   在cmd中运行以下代码，如果返回版本号，即成功    1node -v   npm工具 安装node.js会附赠此工具，npm用于管理node.js的包，对我而言，我将">
+<meta property="og:description" content="主要参照于此文，但是针对自己的需求做了一些改变   更新（2026-09）：现在不再全局安装 hexo，改为用 package.json 里的 npm 脚本调用项目内的 Hexo。原因见下面「本地写作命令速查」。  本地写作命令速查（2026-09 更新）所有命令都在博客仓库根目录（Euclid-Jie.github.io）下执行。    作用 现在的命令 对应的原生命令    新建文章 npm">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/202310152308113.png">
 <meta property="article:published_time" content="2023-10-15T14:08:30.000Z">
-<meta property="article:modified_time" content="2024-07-30T11:53:26.518Z">
+<meta property="article:modified_time" content="2026-09-28T04:21:09.357Z">
 <meta property="article:author" content="Euclid Jie">
 <meta property="article:tag" content="node">
 <meta property="article:tag" content="hexo">
@@ -132,7 +132,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85node-js"><span class="toc-number">1.1.</span> <span class="toc-text">安装node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4node-js%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.</span> <span class="toc-text">确认node.js的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nvmw%E5%B7%A5%E5%85%B7"><span class="toc-number">1.3.</span> <span class="toc-text">nvmw工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E6%9E%84%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-number">2.</span> <span class="toc-text">使用hexo构建博客</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hexo"><span class="toc-number">2.1.</span> <span class="toc-text">安装hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%AC%E5%9C%B0repo"><span class="toc-number">2.2.</span> <span class="toc-text">初始化本地repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E7%BB%84%E7%BB%87%E5%8D%9A%E5%AE%A2%E5%86%85%E5%AE%B9"><span class="toc-number">2.3.</span> <span class="toc-text">使用hexo组织博客内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E5%8D%9A%E5%AE%A2theme"><span class="toc-number">2.4.</span> <span class="toc-text">切换博客theme</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BF%9C%E7%A8%8BRepo"><span class="toc-number">3.</span> <span class="toc-text">设置远程Repo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8GitHub%E5%92%8C%E5%88%9B%E5%BB%BArepo"><span class="toc-number">3.1.</span> <span class="toc-text">在GitHub和创建repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.2.</span> <span class="toc-text">推送设置</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%86%99%E4%BD%9C%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%EF%BC%882026-09-%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">本地写作命令速查（2026-09 更新）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85node-js"><span class="toc-number">2.1.</span> <span class="toc-text">安装node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4node-js%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">2.2.</span> <span class="toc-text">确认node.js的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nvmw%E5%B7%A5%E5%85%B7"><span class="toc-number">2.3.</span> <span class="toc-text">nvmw工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E6%9E%84%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-number">3.</span> <span class="toc-text">使用hexo构建博客</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo-%E7%9A%84%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F%EF%BC%88%E5%B7%B2%E5%8F%98%E6%9B%B4%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">hexo 的安装方式（已变更）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%AC%E5%9C%B0repo"><span class="toc-number">3.2.</span> <span class="toc-text">初始化本地repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E7%BB%84%E7%BB%87%E5%8D%9A%E5%AE%A2%E5%86%85%E5%AE%B9"><span class="toc-number">3.3.</span> <span class="toc-text">使用hexo组织博客内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E5%8D%9A%E5%AE%A2theme"><span class="toc-number">3.4.</span> <span class="toc-text">切换博客theme</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BF%9C%E7%A8%8BRepo"><span class="toc-number">4.</span> <span class="toc-text">设置远程Repo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8GitHub%E5%92%8C%E5%88%9B%E5%BB%BArepo"><span class="toc-number">4.1.</span> <span class="toc-text">在GitHub和创建repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%E8%AE%BE%E7%BD%AE"><span class="toc-number">4.2.</span> <span class="toc-text">推送设置</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -180,6 +180,56 @@
     <blockquote>
 <p>主要参照于<a target="_blank" rel="noopener" href="http://blog.haoji.me/build-blog-website-by-hexo-github.html?from=xa">此文</a>，但是针对自己的需求做了一些改变</p>
 </blockquote>
+<blockquote>
+<p><strong>更新（2026-09）</strong>：现在不再全局安装 <code>hexo</code>，改为用 <code>package.json</code> 里的 npm 脚本调用项目内的 Hexo。<br>原因见下面「本地写作命令速查」。</p>
+</blockquote>
+<h2 id="本地写作命令速查（2026-09-更新）"><a href="#本地写作命令速查（2026-09-更新）" class="headerlink" title="本地写作命令速查（2026-09 更新）"></a>本地写作命令速查（2026-09 更新）</h2><p>所有命令都在博客仓库根目录（<code>Euclid-Jie.github.io</code>）下执行。</p>
+<table>
+<thead>
+<tr>
+<th>作用</th>
+<th>现在的命令</th>
+<th>对应的原生命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>新建文章</td>
+<td><code>npm run new -- &quot;文章标题&quot;</code></td>
+<td><code>hexo new &quot;文章标题&quot;</code></td>
+</tr>
+<tr>
+<td>生成静态页面</td>
+<td><code>npm run g</code></td>
+<td><code>hexo generate</code></td>
+</tr>
+<tr>
+<td>本地预览</td>
+<td><code>npm run s</code></td>
+<td><code>hexo server</code></td>
+</tr>
+<tr>
+<td>清空生成内容</td>
+<td><code>npm run c</code></td>
+<td><code>hexo clean</code></td>
+</tr>
+<tr>
+<td>指定预览端口</td>
+<td><code>npm run s -- -p 90000</code></td>
+<td><code>hexo s -p 90000</code></td>
+</tr>
+</tbody></table>
+<p>为什么改成 npm 脚本：</p>
+<ol>
+<li>**不再需要全局 <code>hexo</code>**。<code>hexo</code> 装在项目的 <code>node_modules</code> 里，直接敲 <code>hexo</code> 会报<br><code>无法将“hexo”项识别为 cmdlet…</code>。用 <code>npm run</code> 会自动使用项目里那个版本。</li>
+<li><strong>版本固定</strong>。全局 <code>hexo</code> 会随升级变化，而 <code>npm run</code> 用的是 <code>package.json</code> 锁定的版本，<br>生成结果才可复现。</li>
+<li>如果临时想用原生写法，可以 <code>npx hexo generate</code>，<code>npx</code> 会找到本地的可执行文件。</li>
+</ol>
+<p>安装依赖（换设备或刚克隆仓库时）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ci</span><br></pre></td></tr></table></figure>
+
+<p>仓库里已经有 <code>.npmrc</code>，默认走国内镜像，不必每次都手动指定 registry：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">registry</span>=https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
+
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装<code>node.js</code></h3><p>&#96;&#96;node.js<code>是</code>js<code>运行的必要条件，关于</code>node.js&#96;的安装，各种教程很多，直接从<a target="_blank" rel="noopener" href="https://nodejs.org/en">官网</a>下载安装即可</p>
 <ul>
 <li>检测是否安装成功</li>
@@ -232,10 +282,13 @@
 <h2 id="使用hexo构建博客"><a href="#使用hexo构建博客" class="headerlink" title="使用hexo构建博客"></a>使用<code>hexo</code>构建博客</h2><blockquote>
 <p><code>hexo</code>是一个成熟的博客生成，管理系统，有丰富的插件，主题生态，官网<a target="_blank" rel="noopener" href="http://hexo.io/">链接</a></p>
 </blockquote>
-<h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装<code>hexo</code></h3><ul>
-<li><p>使用<code>npm</code>进行全局安装<code>hexo</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo</span><br></pre></td></tr></table></figure></li>
-</ul>
+<h3 id="hexo-的安装方式（已变更）"><a href="#hexo-的安装方式（已变更）" class="headerlink" title="hexo 的安装方式（已变更）"></a><code>hexo</code> 的安装方式（已变更）</h3><blockquote>
+<p><strong>【已失效】</strong> 原做法是全局安装：<code>npm install -g hexo</code>。<br>现在不推荐，也不需要 —— 项目自己的 <code>node_modules</code> 里已经有 Hexo，npm 脚本会调用它。<br>只有你想在任意目录直接敲 <code>hexo</code> 时，才需要额外装 CLI：<code>npm install -g hexo-cli</code>。</p>
+</blockquote>
+<p>依赖装在项目里，第一条命令是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm ci</span><br></pre></td></tr></table></figure>
+
+<p>以后新增文章、生成页面、预览，都用上面「本地写作命令速查」里的 npm 脚本。</p>
 <h3 id="初始化本地repo"><a href="#初始化本地repo" class="headerlink" title="初始化本地repo"></a>初始化本地repo</h3><blockquote>
 <p>从本步骤开始，会与网络上的主流教程不同，如果你有一定的<code>git</code>的使用经验，并希望对你的创作内容进行版本控制，我更推荐使用我的方案</p>
 </blockquote>
@@ -249,29 +302,36 @@
 <blockquote>
 <p>以下的步骤，如果不加说明，都是在项目的<code>root</code>目录下进行</p>
 </blockquote>
-<p><code>init</code>结束后，文件下会出现，诸如<code>node_mudules</code>，<code>publish</code>，<code>source</code>，<code>themes</code>等文件夹，说明已经初始化成功</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>init</code> 结束后，文件下会出现 <code>node_modules</code>、<code>scaffolds</code>、<code>source</code>、<code>themes</code> 等文件夹，说明已经初始化成功</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx hexo init</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>使用<code>hexo</code>生产静态网页页面</p>
 <blockquote>
 <p>这一步的操作，可以理解为使用<code>hexo</code>工具对<code>source</code>目录下的的<code>md</code>格式文件，进行静态网页转换，相关的网页文件会保存在<code>public</code>目录下</p>
 </blockquote>
 <p>虽然还什么都没写，但是会有一个默认的介绍<code>hexo</code>的<code>hello_world.md</code>文件存放在<code>source</code>目录下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run g</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p>如果想要清空生成的内容，使用</p>
 </blockquote>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run c</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>预览网页</p>
 <p>会在本地4000端口生成一个网页(也可以指定端口），可以进行预览，后续只要把这个网页托管到githug.io或自己的服务器并绑定域名，既可以实现个人博客构建</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br><span class="line">hexo s -p 90000</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm run s</span><br><span class="line">npm run s -- -p 90000</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="使用hexo组织博客内容"><a href="#使用hexo组织博客内容" class="headerlink" title="使用hexo组织博客内容"></a>使用<code>hexo</code>组织博客内容</h3><ul>
 <li><p>创建新的博客</p>
-<p>将成功创建名为”postName”的<code>md</code>文件在<code>source</code>下，编辑此文件，既可以实现博文撰写</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;postName&quot;</span><br></pre></td></tr></table></figure></li>
+<p>将成功创建名为”postName”的<code>md</code>文件在<code>source/_posts</code>下，编辑此文件，既可以实现博文撰写</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run new -- &quot;postName&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>--</code> 用来把后面的参数原样传给 <code>hexo</code>。漏掉它，npm 会把 <code>&quot;postName&quot;</code> 当成自己的参数，<br>文章名就变成默认的 <code>untitled</code>。</p>
+</blockquote>
+</li>
 </ul>
 <h3 id="切换博客theme"><a href="#切换博客theme" class="headerlink" title="切换博客theme"></a>切换博客<code>theme</code></h3><p>官方<a target="_blank" rel="noopener" href="https://hexo.io/themes/">网站</a>列出了很多不同风格的模板，网上的各种<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/24422335/answer/3127401635">推荐</a>也很多，可根据自己的喜好选择</p>
 <ul>
@@ -285,7 +345,7 @@
 
 </li>
 <li><p>修改配置文件</p>
-<p>修改<code>_config.yml</code>中的<code>theme: landscape</code>改为<code>theme: yilia</code>，然后重新执行<code>hexo g</code>来重新生成</p>
+<p>修改<code>_config.yml</code>中的<code>theme: landscape</code>改为<code>theme: yilia</code>，然后重新执行<code>npm run g</code>来重新生成</p>
 </li>
 </ul>
 <h2 id="设置远程Repo"><a href="#设置远程Repo" class="headerlink" title="设置远程Repo"></a>设置远程Repo</h2><p>此时已经有了一个本地的<code>repo</code>，可以实现<code>md</code>转网页，并预览，只要将这个网页托管到网站上，既可以实现博客部署。后续如果博客的内容进行了修改，只要使用<code>hexo</code>重新生成后，将生成的网页内容<code>push</code>到远程，即可实现博客更新</p>
@@ -315,7 +375,7 @@
 <li><p>推送流程</p>
 <p>在完成所有设置后，依次使用，即可实现博客推送</p>
 <ul>
-<li><code>hexo g</code> : 基于<code>source</code>目录下的<code>md</code>文件生成网页文件至<code>docs</code>目录</li>
+<li><code>npm run g</code> : 基于<code>source</code>目录下的<code>md</code>文件生成网页文件至<code>docs</code>目录</li>
 <li><code>git add .</code>：将所有更改暂存</li>
 <li><code>git commit</code>：提交本地更改</li>
 <li><code>git push</code>：将本地更改推送至远程</li>
@@ -350,7 +410,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85node-js"><span class="toc-number">1.1.</span> <span class="toc-text">安装node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4node-js%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.</span> <span class="toc-text">确认node.js的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nvmw%E5%B7%A5%E5%85%B7"><span class="toc-number">1.3.</span> <span class="toc-text">nvmw工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E6%9E%84%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-number">2.</span> <span class="toc-text">使用hexo构建博客</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hexo"><span class="toc-number">2.1.</span> <span class="toc-text">安装hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%AC%E5%9C%B0repo"><span class="toc-number">2.2.</span> <span class="toc-text">初始化本地repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E7%BB%84%E7%BB%87%E5%8D%9A%E5%AE%A2%E5%86%85%E5%AE%B9"><span class="toc-number">2.3.</span> <span class="toc-text">使用hexo组织博客内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E5%8D%9A%E5%AE%A2theme"><span class="toc-number">2.4.</span> <span class="toc-text">切换博客theme</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BF%9C%E7%A8%8BRepo"><span class="toc-number">3.</span> <span class="toc-text">设置远程Repo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8GitHub%E5%92%8C%E5%88%9B%E5%BB%BArepo"><span class="toc-number">3.1.</span> <span class="toc-text">在GitHub和创建repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.2.</span> <span class="toc-text">推送设置</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%86%99%E4%BD%9C%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%EF%BC%882026-09-%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">本地写作命令速查（2026-09 更新）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85node-js"><span class="toc-number">2.1.</span> <span class="toc-text">安装node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4node-js%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-number">2.2.</span> <span class="toc-text">确认node.js的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nvmw%E5%B7%A5%E5%85%B7"><span class="toc-number">2.3.</span> <span class="toc-text">nvmw工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E6%9E%84%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-number">3.</span> <span class="toc-text">使用hexo构建博客</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo-%E7%9A%84%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F%EF%BC%88%E5%B7%B2%E5%8F%98%E6%9B%B4%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">hexo 的安装方式（已变更）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%AC%E5%9C%B0repo"><span class="toc-number">3.2.</span> <span class="toc-text">初始化本地repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8hexo%E7%BB%84%E7%BB%87%E5%8D%9A%E5%AE%A2%E5%86%85%E5%AE%B9"><span class="toc-number">3.3.</span> <span class="toc-text">使用hexo组织博客内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8D%A2%E5%8D%9A%E5%AE%A2theme"><span class="toc-number">3.4.</span> <span class="toc-text">切换博客theme</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E8%BF%9C%E7%A8%8BRepo"><span class="toc-number">4.</span> <span class="toc-text">设置远程Repo</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8GitHub%E5%92%8C%E5%88%9B%E5%BB%BArepo"><span class="toc-number">4.1.</span> <span class="toc-text">在GitHub和创建repo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%E8%AE%BE%E7%BD%AE"><span class="toc-number">4.2.</span> <span class="toc-text">推送设置</span></a></li></ol></li></ol>
       </div>
     
 

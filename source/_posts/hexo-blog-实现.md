@@ -8,6 +8,41 @@ tags:
 
 > 主要参照于[此文](http://blog.haoji.me/build-blog-website-by-hexo-github.html?from=xa)，但是针对自己的需求做了一些改变
 
+> **更新（2026-09）**：现在不再全局安装 `hexo`，改为用 `package.json` 里的 npm 脚本调用项目内的 Hexo。
+> 原因见下面「本地写作命令速查」。
+
+## 本地写作命令速查（2026-09 更新）
+
+所有命令都在博客仓库根目录（`Euclid-Jie.github.io`）下执行。
+
+| 作用 | 现在的命令 | 对应的原生命令 |
+| --- | --- | --- |
+| 新建文章 | `npm run new -- "文章标题"` | `hexo new "文章标题"` |
+| 生成静态页面 | `npm run g` | `hexo generate` |
+| 本地预览 | `npm run s` | `hexo server` |
+| 清空生成内容 | `npm run c` | `hexo clean` |
+| 指定预览端口 | `npm run s -- -p 90000` | `hexo s -p 90000` |
+
+为什么改成 npm 脚本：
+
+1. **不再需要全局 `hexo`**。`hexo` 装在项目的 `node_modules` 里，直接敲 `hexo` 会报
+   `无法将“hexo”项识别为 cmdlet…`。用 `npm run` 会自动使用项目里那个版本。
+2. **版本固定**。全局 `hexo` 会随升级变化，而 `npm run` 用的是 `package.json` 锁定的版本，
+   生成结果才可复现。
+3. 如果临时想用原生写法，可以 `npx hexo generate`，`npx` 会找到本地的可执行文件。
+
+安装依赖（换设备或刚克隆仓库时）：
+
+```shell
+npm ci
+```
+
+仓库里已经有 `.npmrc`，默认走国内镜像，不必每次都手动指定 registry：
+
+```ini
+registry=https://registry.npmmirror.com
+```
+
 ## 准备工作
 
 ### 安装`node.js`
@@ -82,13 +117,19 @@ tags:
 
 > `hexo`是一个成熟的博客生成，管理系统，有丰富的插件，主题生态，官网[链接](http://hexo.io)
 
-### 安装`hexo`
+### `hexo` 的安装方式（已变更）
 
-- 使用`npm`进行全局安装`hexo`
+> **【已失效】** 原做法是全局安装：`npm install -g hexo`。
+> 现在不推荐，也不需要 —— 项目自己的 `node_modules` 里已经有 Hexo，npm 脚本会调用它。
+> 只有你想在任意目录直接敲 `hexo` 时，才需要额外装 CLI：`npm install -g hexo-cli`。
 
-  ```shell
-  npm install -g hexo
-  ```
+依赖装在项目里，第一条命令是：
+
+```shell
+npm ci
+```
+
+以后新增文章、生成页面、预览，都用上面「本地写作命令速查」里的 npm 脚本。
 
 ### 初始化本地repo
 
@@ -102,10 +143,10 @@ tags:
 
   > 以下的步骤，如果不加说明，都是在项目的`root`目录下进行
 
-  `init`结束后，文件下会出现，诸如`node_mudules`，`publish`，`source`，`themes`等文件夹，说明已经初始化成功
+  > `init` 结束后，文件下会出现 `node_modules`、`scaffolds`、`source`、`themes` 等文件夹，说明已经初始化成功
 
   ```shell
-  hexo init
+  npx hexo init
   ```
 
 - 使用`hexo`生产静态网页页面
@@ -115,12 +156,12 @@ tags:
   虽然还什么都没写，但是会有一个默认的介绍`hexo`的`hello_world.md`文件存放在`source`目录下
 
   ```shell
-  hexo g
+  npm run g
   ```
 
   > 如果想要清空生成的内容，使用
   ```shell
-  hexo clean
+  npm run c
   ```
 
 - 预览网页
@@ -128,19 +169,22 @@ tags:
   会在本地4000端口生成一个网页(也可以指定端口），可以进行预览，后续只要把这个网页托管到githug.io或自己的服务器并绑定域名，既可以实现个人博客构建
 
   ```shell
-  hexo s
-  hexo s -p 90000
+  npm run s
+  npm run s -- -p 90000
   ```
 
 ### 使用`hexo`组织博客内容
 
 - 创建新的博客
 
-  将成功创建名为"postName"的`md`文件在`source`下，编辑此文件，既可以实现博文撰写
+  将成功创建名为"postName"的`md`文件在`source/_posts`下，编辑此文件，既可以实现博文撰写
 
   ```shell
-  hexo new "postName"
+  npm run new -- "postName"
   ```
+
+  > `--` 用来把后面的参数原样传给 `hexo`。漏掉它，npm 会把 `"postName"` 当成自己的参数，
+  > 文章名就变成默认的 `untitled`。
 
 ###  切换博客`theme`
 
@@ -161,7 +205,7 @@ tags:
 
 - 修改配置文件
 
-  修改`_config.yml`中的`theme: landscape`改为`theme: yilia`，然后重新执行`hexo g`来重新生成
+  修改`_config.yml`中的`theme: landscape`改为`theme: yilia`，然后重新执行`npm run g`来重新生成
 
 ## 设置远程Repo
 
@@ -216,7 +260,7 @@ tags:
 
   在完成所有设置后，依次使用，即可实现博客推送
 
-  - `hexo g` : 基于`source`目录下的`md`文件生成网页文件至`docs`目录
+  - `npm run g` : 基于`source`目录下的`md`文件生成网页文件至`docs`目录
   - `git add .`：将所有更改暂存
   - `git commit`：提交本地更改
   -  `git push`：将本地更改推送至远程
