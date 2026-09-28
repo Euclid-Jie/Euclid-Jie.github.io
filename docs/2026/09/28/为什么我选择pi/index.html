@@ -6,18 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="关于我在众多agent工具中，为什么选择了pi 极简没有复杂的功能，一切由自己定义。可以配置几个简单的skills即可，不占用过多的上下文  响应启动速度很快，可以适配各种自己的模型，用cc-swich接入就好  类claude code命令模式基本和 claude code一致，迁移无感">
+    <meta name="description" content="关于我在众多agent工具中，为什么选择了pi 试过的工具不算少，最后让我固定下来的原因其实很朴素：它足够小，改动它的成本足够低，而且不用我改变已有的习惯。下面按当初做决定时的三条标准来说。 极简没有复杂的功能，一切由自己定义。可以配置几个简单的skills即可，不占用过多的上下文  “极简”不是功能少，而是默认不加载。pi 的资源一共就四类，从轻到重排是：  skills：一个目录加 SKILL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="为什么我选择pi">
 <meta property="og:url" content="https://euclid-jie.github.io/2026/09/28/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E9%80%89%E6%8B%A9pi/index.html">
 <meta property="og:site_name" content="Euclid Jie&#39;s Blog">
-<meta property="og:description" content="关于我在众多agent工具中，为什么选择了pi 极简没有复杂的功能，一切由自己定义。可以配置几个简单的skills即可，不占用过多的上下文  响应启动速度很快，可以适配各种自己的模型，用cc-swich接入就好  类claude code命令模式基本和 claude code一致，迁移无感">
+<meta property="og:description" content="关于我在众多agent工具中，为什么选择了pi 试过的工具不算少，最后让我固定下来的原因其实很朴素：它足够小，改动它的成本足够低，而且不用我改变已有的习惯。下面按当初做决定时的三条标准来说。 极简没有复杂的功能，一切由自己定义。可以配置几个简单的skills即可，不占用过多的上下文  “极简”不是功能少，而是默认不加载。pi 的资源一共就四类，从轻到重排是：  skills：一个目录加 SKILL">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/image-20260928120905681.png">
 <meta property="og:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/image-20260928121041483.png">
 <meta property="article:published_time" content="2026-09-28T04:04:56.000Z">
-<meta property="article:modified_time" content="2026-09-28T04:11:25.270Z">
+<meta property="article:modified_time" content="2026-09-28T04:28:39.389Z">
 <meta property="article:author" content="Euclid Jie">
+<meta property="article:tag" content="AI辅助写作">
+<meta property="article:tag" content="pi">
+<meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/image-20260928120905681.png">
     
@@ -131,7 +134,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%81%E7%AE%80"><span class="toc-number">1.</span> <span class="toc-text">极简</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">响应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BBclaude-code"><span class="toc-number">3.</span> <span class="toc-text">类claude code</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%81%E7%AE%80"><span class="toc-number">1.</span> <span class="toc-text">极简</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">响应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BBclaude-code"><span class="toc-number">3.</span> <span class="toc-text">类claude code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BC%9A%E8%AF%9D"><span class="toc-number">4.</span> <span class="toc-text">上下文和会话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E5%88%B6%E5%92%8C%E5%88%86%E5%8F%91"><span class="toc-number">5.</span> <span class="toc-text">定制和分发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%BD%E8%A2%AB%E8%84%9A%E6%9C%AC%E8%B0%83%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">能被脚本调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E4%BB%B7"><span class="toc-number">7.</span> <span class="toc-text">代价</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">小结</span></a></li></ol>
       </div>
     
   </span>
@@ -163,8 +166,18 @@
 
 
       
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/tools/">tools</a>
+    </div>
+
 
       
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AI%E8%BE%85%E5%8A%A9%E5%86%99%E4%BD%9C/" rel="tag">AI辅助写作</a>, <a class="p-category" href="/tags/agent/" rel="tag">agent</a>, <a class="p-category" href="/tags/pi/" rel="tag">pi</a>
+    </div>
+
 
     </div>
   </header>
@@ -172,11 +185,119 @@
 
   <div class="content e-content" itemprop="articleBody">
     <p>关于我在众多<code>agent</code>工具中，为什么选择了<a target="_blank" rel="noopener" href="https://pi.dev/"><code>pi</code></a></p>
+<p>试过的工具不算少，最后让我固定下来的原因其实很朴素：<strong>它足够小，改动它的成本足够低，而且不用我改变已有的习惯</strong>。下面按当初做决定时的三条标准来说。</p>
 <h2 id="极简"><a href="#极简" class="headerlink" title="极简"></a>极简</h2><p>没有复杂的功能，一切由自己定义。可以配置几个简单的<code>skills</code>即可，不占用过多的上下文</p>
 <p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/image-20260928120905681.png" alt="image-20260928120905681"></p>
-<h2 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h2><p>启动速度很快，可以适配各种自己的模型，用<code>cc-swich</code>接入就好</p>
+<p>“极简”不是功能少，而是<strong>默认不加载</strong>。<code>pi</code> 的资源一共就四类，从轻到重排是：</p>
+<ul>
+<li><code>skills</code>：一个目录加 <code>SKILL.md</code>，可以顺带带脚本和参考资料</li>
+<li><code>prompt templates</code>：纯 <code>Markdown</code>，文件名就是命令名</li>
+<li><code>extensions</code>：<code>TypeScript</code> 模块，能注册工具、命令、快捷键和事件钩子</li>
+<li><code>themes</code>：终端配色</li>
+</ul>
+<p>关键在于 <code>skills</code> 的加载方式：启动时进系统提示词的只有每个 <code>skills</code> 的<strong>名字和描述</strong>，完整说明要等模型判断这个任务需要它时才去读 <code>SKILL.md</code>。也就是说，装了十个 <code>skills</code> 不等于每次对话都背着十份说明书——这一点直接决定了我能不能长期往里堆东西而不把上下文撑爆。</p>
+<p><code>prompt templates</code> 更轻，本质就是给一段常用提示词起个名字：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">description: Review staged git changes</span><br><span class="line"><span class="section">argument-hint: &quot;[focus]&quot;</span></span><br><span class="line"><span class="section">---</span></span><br><span class="line">Review the staged changes. Focus on $&#123;1:-correctness, security, and error handling&#125;.</span><br></pre></td></tr></table></figure>
+
+<p>放在 <code>~/.pi/agent/prompts/review.md</code>，它就变成 <code>/review</code>；<code>$&#123;1:-默认值&#125;</code> 接参数，<code>/review concurrency</code> 这样传。不用写一行代码。</p>
+<p>只有确实需要<strong>可执行</strong>的东西时才轮到 <code>extensions</code>，那时才需要写 <code>TypeScript</code>。这个梯度很重要：大多数需求我用 <code>Markdown</code> 就能解决，不必为了加个小功能去维护一个插件工程。</p>
+<h2 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h2><p>启动速度很快，可以适配各种自己的模型，用<code>cc-switch</code>接入就好</p>
 <p><img src="https://euclid-picgo.oss-cn-shenzhen.aliyuncs.com/image/image-20260928121041483.png" alt="image-20260928121041483"></p>
+<p>模型这块是我最看重的，因为它决定了我能不能用上自己手头的额度。<code>pi</code> 的做法是：</p>
+<ul>
+<li>内置目录里的服务商直接 <code>/login</code>，走订阅或 <code>API key</code>，凭证存在 <code>auth.json</code></li>
+<li>也支持环境变量，例如 <code>OPENAI_API_KEY</code>、<code>DEEPSEEK_API_KEY</code>、<code>MISTRAL_API_KEY</code> 这类，适合不想落盘的场景</li>
+<li>切换模型用 <code>/model</code>，<code>Ctrl+P</code> 在候选之间循环；在选择器里按 <code>Ctrl+S</code> 可以把当前模型存成新会话的默认</li>
+<li><code>/thinking</code> 调思考等级，<code>/scoped-models</code> 控制 <code>Ctrl+P</code> 循环的范围</li>
+</ul>
+<p>自己接的服务也留了口子：只要对方讲的是 <code>OpenAI</code> &#x2F; <code>Anthropic</code> &#x2F; <code>Google</code> 兼容的协议（本地的 <code>Ollama</code>、<code>LM Studio</code>、<code>vLLM</code>、<code>SGLang</code>，或者各种中转），写进 <code>models.json</code> 就是一个可选项：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;providers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;ollama&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;baseUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:11434/v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;api&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openai-completions&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;apiKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ollama&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;models&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span> <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;qwen2.5-coder:7b&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>本地 <code>GGUF</code> 模型有专门的 <code>llama.cpp</code> 路由，用 <code>/llama</code> 管理、<code>/model</code> 选择。凭证的优先级是 <code>--api-key</code> &gt; <code>auth.json</code> &gt; <code>models.json</code> 里的 <code>apiKey</code> &gt; 环境变量，冲突时按这个顺序生效。</p>
+<p>顺带记一下版本：我是从 <code>0.87.1</code> 开始用的，<code>Node.js</code> 需要 <code>22.19</code> 以上。命令类的东西版本一变就可能对不上，写下来免得以后自己回头看不懂。</p>
 <h2 id="类claude-code"><a href="#类claude-code" class="headerlink" title="类claude code"></a>类claude code</h2><p>命令模式基本和 <code>claude code</code>一致，迁移无感</p>
+<p>这不是“抄得像”，而是<strong>肌肉记忆不用重建</strong>：<code>/</code> 打开命令菜单，<code>@</code> 搜文件加进上下文，<code>Tab</code> 补全路径，<code>Shift+Enter</code> 换行，<code>Ctrl+O</code> 折叠或展开工具输出，<code>Ctrl+T</code> 显示思考块。</p>
+<p>边跑边插话的交互也一致，这点在实际干活时比快捷键更重要：</p>
+<table>
+<thead>
+<tr>
+<th>想做的事</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>修正当前任务方向</td>
+<td>输入后 <code>Enter</code></td>
+</tr>
+<tr>
+<td>在当前任务之后追加工作</td>
+<td>输入后 <code>Alt+Enter</code></td>
+</tr>
+<tr>
+<td>把排队中的消息收回编辑器</td>
+<td><code>Alt+Up</code></td>
+</tr>
+<tr>
+<td>中断当前任务</td>
+<td><code>Escape</code></td>
+</tr>
+</tbody></table>
+<p><strong><code>Windows</code> 用户注意</strong>：<code>Windows Terminal</code> 占用了部分 <code>Alt</code> 快捷键，上面几个组合键未必都能直接用，需要按官方文档里给的替代键位配一下。我在 <code>Windows</code> 上就先踩过这个。</p>
+<h2 id="上下文和会话"><a href="#上下文和会话" class="headerlink" title="上下文和会话"></a>上下文和会话</h2><p>用久了的工具，最后拼的都是“上下文怎么管”。<code>pi</code> 把会话存成 <code>JSONL</code>，消息、工具调用、模型切换、压缩都作为条目记录，而且<strong>按树存</strong>：</p>
+<ul>
+<li><code>/tree</code> 在当前会话里换分支，回到早先的提问改一版，原来的分支不会被抹掉</li>
+<li><code>/fork</code> 从某条历史用户消息开一个新会话，把岔路做成独立的工作</li>
+<li><code>/clone</code> 把当前状态复制成一个新会话</li>
+</ul>
+<p>上下文逼近上限时会自动压缩：插入一条摘要条目，后续请求用摘要替代更早的消息，<strong>原始条目仍然留在会话文件里</strong>，不是删掉。想控制压缩后保留什么，可以手动 <code>/compact 保留关于 xxx 的结论</code>。页脚实时显示上下文占用，<code>/session</code> 能看到会话文件、消息数、token 和花费。</p>
+<p>对我这种经常“干到一半想回去换个方向”的人，这套东西比单线的聊天记录实用得多。</p>
+<h2 id="定制和分发"><a href="#定制和分发" class="headerlink" title="定制和分发"></a>定制和分发</h2><p>四类资源都能单独用，也能打包成一个 <code>Pi package</code> 通过 <code>npm</code> 或 <code>git</code> 分发：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pi install npm:@example/pi-tools@1.0.0</span><br><span class="line">pi install git:github.com/example/pi-tools@v1</span><br><span class="line">pi install ./local-package</span><br><span class="line">pi list</span><br></pre></td></tr></table></figure>
+
+<p><code>pi update --extensions</code> 负责把包里的资源刷新到最新，<code>pi -e npm:@example/pi-tools</code> 可以在不写进配置的情况下先试一次。对我这种喜欢自己改工具的人，等于“<strong>个人配置和项目配置是分开的</strong>”：项目里的 <code>.pi/settings.json</code> 只在信任该项目之后才加载。</p>
+<h2 id="能被脚本调用"><a href="#能被脚本调用" class="headerlink" title="能被脚本调用"></a>能被脚本调用</h2><p>这一点容易被忽略，但决定了它能不能长在别的工作流里。同一套 agent 和会话机制，有几种外壳：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>交互模式</td>
+<td>人在终端里干活</td>
+</tr>
+<tr>
+<td><code>print</code> 模式</td>
+<td>跑一个提示词，只要最终结果</td>
+</tr>
+<tr>
+<td><code>JSON</code> 模式</td>
+<td>把事件按 <code>JSONL</code> 输出</td>
+</tr>
+<tr>
+<td><code>RPC</code> 模式</td>
+<td>作为子进程，<code>stdin</code> &#x2F; <code>stdout</code> 收发 <code>JSONL</code>，与语言无关</td>
+</tr>
+<tr>
+<td><code>TypeScript SDK</code></td>
+<td>在 <code>Node.js</code> 进程内直接创建和控制会话</td>
+</tr>
+</tbody></table>
+<p>所以同一个工具，既能在终端里手敲，也能被脚本或别的程序驱动，不必再为“自动化场景”换一个产品。</p>
+<h2 id="代价"><a href="#代价" class="headerlink" title="代价"></a>代价</h2><p>说好处也得说代价，免得看着像无脑推荐：</p>
+<ul>
+<li><strong>它不逐条确认工具调用</strong>。方便，但如果你习惯“每一步都点同意”，会不适应；不确定的目录该用沙箱或自己控制权限。</li>
+<li><strong><code>extensions</code> 在 <code>pi</code> 进程内执行</strong>，拿到的是当前用户的系统权限。第三方包安装前值得读一眼源码，项目级配置更要先信任项目再加载。</li>
+<li><strong>极简的另一面是你得自己补</strong>。缺少的功能要么用 <code>skills</code>、<code>prompt templates</code> 补，要么自己写 <code>extensions</code>——这对愿意折腾的人是优点，对只想开箱即用的人是成本。</li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>按我的三条标准对照下来：</p>
+<ul>
+<li><strong>极简</strong>：核心很小，资源默认不加载，<code>skills</code> 只在需要时读正文</li>
+<li><strong>响应</strong>：启动快，模型能换成自己的，兼容端点写进 <code>models.json</code> 就完事</li>
+<li><strong>迁移</strong>：命令和交互跟 <code>claude code</code> 基本一致，<code>Windows</code> 上注意 <code>Alt</code> 键被占用的问题</li>
+</ul>
+<p>它的取舍很明确：<strong>把“定义权”交给你，代价是你要自己定义</strong>。对我来说这笔交易是划算的。</p>
 
   </div>
 </article>
@@ -204,7 +325,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%81%E7%AE%80"><span class="toc-number">1.</span> <span class="toc-text">极简</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">响应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BBclaude-code"><span class="toc-number">3.</span> <span class="toc-text">类claude code</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%81%E7%AE%80"><span class="toc-number">1.</span> <span class="toc-text">极简</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%8D%E5%BA%94"><span class="toc-number">2.</span> <span class="toc-text">响应</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BBclaude-code"><span class="toc-number">3.</span> <span class="toc-text">类claude code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%92%8C%E4%BC%9A%E8%AF%9D"><span class="toc-number">4.</span> <span class="toc-text">上下文和会话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E5%88%B6%E5%92%8C%E5%88%86%E5%8F%91"><span class="toc-number">5.</span> <span class="toc-text">定制和分发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%BD%E8%A2%AB%E8%84%9A%E6%9C%AC%E8%B0%83%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">能被脚本调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E4%BB%B7"><span class="toc-number">7.</span> <span class="toc-text">代价</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">小结</span></a></li></ol>
       </div>
     
 
